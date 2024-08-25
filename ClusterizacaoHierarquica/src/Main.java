@@ -1,6 +1,6 @@
 import java.util.ArrayList;
 
-public class MainHeap {
+public class Main{
     public static void main(String[] args) {
         // GERADOR DE PONTOS
 
@@ -8,7 +8,7 @@ public class MainHeap {
 
 
 
-        int n =1000;
+        int n =50;
 
         GeradorPontos geradorPontos = new GeradorPontos();
 
@@ -33,9 +33,9 @@ public class MainHeap {
         System.out.println("\nTempo total de execucao: " + duracao + " milissegundos");
         System.out.println("AGORA O HEAP");
 
-        //HEAP
+        //////HEAP
 
-        ArrayList<Distancia> listaDistancias = new ArrayList();
+        ArrayList<Distancia> listaDistancias = new ArrayList<Distancia>();
 
         Distancia distanciaAtual;
 
@@ -61,14 +61,15 @@ public class MainHeap {
         HeapBinariaMinima heapDistancias = new HeapBinariaMinima( vetorDistancias.length, vetorDistancias,listaClustersHeap);
 
         while (heapDistancias.getN() != 0){
-            heapDistancias.criaCluster();
+
+                heapDistancias.criaCluster();
 
         }
 
         tempoFim = System.currentTimeMillis();
         duracao = tempoFim - tempoIni;
 
-
+        System.out.println(heapDistancias.getListaClusters());
         heapDistancias.getListaClusters().getFirst().mostra();
 
         System.out.println("\nTempo total de execucao: " + duracao + " milissegundos");
