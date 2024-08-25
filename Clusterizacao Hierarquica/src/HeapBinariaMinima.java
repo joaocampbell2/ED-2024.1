@@ -1,24 +1,21 @@
+import java.util.ArrayList;
+
 public class HeapBinariaMinima
 {
 	private int n;               /* Numero de elementos no heap. */   
 	private int tam;             /* Tamanho máximo do heap. */
-	private int[] vetor;          /* Vetor com elementos. */
+	private Distancia[] vetor;          /* Vetor com elementos. */
 
+	private ArrayList<Cluster> listaClusters;
 	/* Constrói heap vazio. */
-	public HeapBinariaMinima(int tamanho)
-	{
-		n = 0;
-		tam = tamanho;
-		vetor = new int[tamanho+1];
-	}
 
 	/* Constrói heap a partir de vetor v. */
-	public HeapBinariaMinima(int tamanho, int[] v)
+	public HeapBinariaMinima(int tamanho, Distancia[] v, ArrayList<Cluster> listaClusters)
 	{
 		tam = tamanho;
-		vetor = new int[tamanho+1];
+		vetor = new Distancia[tamanho+1];
 		n = tamanho;
-
+		this.listaClusters = listaClusters;
 		for( int i = 0; i < tamanho; i++ )
 			vetor[ i + 1 ] = v[ i ];
 
@@ -51,26 +48,26 @@ public class HeapBinariaMinima
 
 	/* Busca o menor item na fila de prioridades.
 	   Retorna o menor item em itemMin e true, ou falso se a heap estiver vazia. */
-	public int min()
+	public Distancia min()
 	{
 		if (this.vazia())
 		{
 			System.out.println("Fila de prioridades vazia!");
-			return Integer.MAX_VALUE;
+			return null;
 		}
 
 		return vetor[1];
 	}
 
 	/* Remove o menor item da lista de prioridades e coloca ele em itemMin. */
-	public int removeMin()
+	public Distancia removeMin()
 	{
-		int itemMin;
+		Distancia itemMin;
 		
 		if(this.vazia())
 		{
 			System.out.println("Fila de prioridades vazia!");
-			return Integer.MAX_VALUE;
+			return null;
 		}
 
 		itemMin = vetor[1];
@@ -80,6 +77,22 @@ public class HeapBinariaMinima
 		
 		return itemMin;
 	}
+	public void removeDistancias(Cluster cluster1, Cluster cluster2){
+		for (int i = 1; i<= n;i++){
+			if (vetor[i].cluster1 == cluster1 || vetor[i].cluster1 == cluster2 || vetor[i].cluster2 == cluster2 || vetor[i].cluster2 == cluster1){
+				vetor[i] = vetor[n];
+				n--;
+				i = 0;
+			}
+
+		}
+		constroiHeap();
+
+		listaClusters.remove(cluster1);
+		listaClusters.remove(cluster2);
+
+	}
+
 
 	/* Método auxiliar que estabelece a propriedade de ordem do heap a 
 	 * partir de um vetor arbitrário dos itens. */
@@ -93,7 +106,7 @@ public class HeapBinariaMinima
 	 * não está sendo respeitada pelo nó i. */
 	private void refaz(int i)
 	{
-		int x = vetor[ i ];
+		Distancia x = vetor[ i ];
 
 		while(2*i <= n)
 		{
@@ -109,12 +122,12 @@ public class HeapBinariaMinima
 			if(filhoDir <= n)
 			{
 				 /* Em caso positivo, verifica se é menor que o filho esquerdo. */
-				if(vetor[ filhoDir ] < vetor[ filhoEsq ])
+				if(vetor[ filhoDir ].valDistancia < vetor[ filhoEsq ].valDistancia)
 					menorFilho = filhoDir;
 			}
 
 			/* Compara o valor do menor dos filhos com x. */
-			if(vetor[ menorFilho ] < x)
+			if(vetor[ menorFilho ].valDistancia < x.valDistancia)
 				vetor [ i ] = vetor[ menorFilho ];
 			else
 				break;
@@ -130,7 +143,7 @@ public class HeapBinariaMinima
 
 	/* Insere item x na fila de prioridade, mantendo a propriedade do heap.
 	 * São permitidas duplicatas. */
-	public void insere(int x)
+	public void insere(Distancia x)
 	{
 		if (tam == n)
 		{
@@ -147,12 +160,37 @@ public class HeapBinariaMinima
 		vetor[0] = x;
 
 		/* Refaz heap (sobe elemento). */
-		while(x < vetor[pos/2])
+		while(x.valDistancia < vetor[pos/2].valDistancia)
 		{
 			vetor[pos] = vetor[ pos/2 ];
 			pos /= 2;
 		}
 		
 		vetor[pos] = x;
+	}
+
+	public int getN() {
+		return n;
+	}
+
+	private void incluiDistancias(Cluster novoCluster){
+		Distancia novaDistancia;
+		for (Cluster cluster: listaClusters){
+			novaDistancia = new Distancia(novoCluster, cluster);
+			insere(novaDistancia);
+		}
+		listaClusters.add(novoCluster);
+	}
+
+	public void criaCluster(){
+		Distancia menorDistancia = removeMin();
+		Cluster novoCluster = new Cluster(menorDistancia.cluster1, menorDistancia.cluster2);
+		removeDistancias(menorDistancia.cluster1,menorDistancia.cluster2);
+		incluiDistancias(novoCluster);
+
+	}
+
+	public ArrayList<Cluster> getListaClusters() {
+		return listaClusters;
 	}
 }
