@@ -4,11 +4,10 @@ public class Main{
     public static void main(String[] args) {
         // GERADOR DE PONTOS
 
-        long tempoIni = System.currentTimeMillis();
 
 
 
-        int n =50;
+        int n =1000;
 
         GeradorPontos geradorPontos = new GeradorPontos();
 
@@ -16,15 +15,14 @@ public class Main{
 
         ArrayList<Cluster> listaClustersHeap = new ArrayList<>(listaClusters);
         ArrayList<Cluster> listaClustersNaive = new ArrayList<>(listaClusters) ;
-        System.out.println(listaClustersNaive.size());
         //NAIVE
+        long tempoIni = System.currentTimeMillis();
 
         while (listaClustersNaive.size() != 1){
 
             clusterizar(listaClustersNaive);
 
         }
-
 
         listaClustersNaive.getFirst().mostra();
         long tempoFim = System.currentTimeMillis();
@@ -39,7 +37,6 @@ public class Main{
 
         Distancia distanciaAtual;
 
-        tempoIni = System.currentTimeMillis();
 
         System.out.println(listaClustersHeap.size());
         for(int i = 0; i< listaClustersHeap.size() ;i++){
@@ -57,22 +54,34 @@ public class Main{
         for (int i = 0; i <listaDistancias.size();i++){
             vetorDistancias[i] = listaDistancias.get(i);
         }
+        tempoIni = System.currentTimeMillis();
 
-        HeapBinariaMinima heapDistancias = new HeapBinariaMinima( vetorDistancias.length, vetorDistancias,listaClustersHeap);
+        HeapBinariaMinima heapDistancias = new HeapBinariaMinima( vetorDistancias.length ,listaClustersHeap);
+        for(int i = 0; i< listaClustersHeap.size() ;i++){
+            Cluster clusterI = listaClustersHeap.get(i);
+            for (int j = i + 1; j < listaClustersHeap.size(); j++){
+                Cluster clusterJ = listaClustersHeap.get(j);
+                distanciaAtual = new Distancia(clusterI,clusterJ);
+                heapDistancias.insere(distanciaAtual);
+            }
+        }
 
-        while (heapDistancias.getN() != 0){
+        while (heapDistancias.getListaClusters().size() != 1){
 
-                heapDistancias.criaCluster();
-
+                heapDistancias.novoCluster();
         }
 
         tempoFim = System.currentTimeMillis();
         duracao = tempoFim - tempoIni;
-
         System.out.println(heapDistancias.getListaClusters());
         heapDistancias.getListaClusters().getFirst().mostra();
 
         System.out.println("\nTempo total de execucao: " + duracao + " milissegundos");
+        System.out.println("\nTempo total de execucao: " + heapDistancias.duracaoApaga + " milissegundos");
+        System.out.println("\nTempo total de execucao: " + heapDistancias.duracaoConstroi + " milissegundos");
+
+
+
     }
 
     public static void clusterizar(ArrayList<Cluster> listaClusters){

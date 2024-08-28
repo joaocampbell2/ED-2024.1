@@ -25,7 +25,6 @@ public class  GeradorPontos {
             Cluster cluster = new Cluster(x,y);
             listaClusters.add(cluster);
         }
-
         return listaClusters;
     }
 
