@@ -16,11 +16,9 @@ public class  GeradorPontos {
         for (int i = 0; i<n; i++){
             double x, y;
 
-            x = gerador.nextDouble(n-1)+ 1;
-            y = gerador.nextDouble(n-1)+ 1;
+            x = gerador.nextDouble(n-1) + 1;
+            y = gerador.nextDouble(n-1) + 1;
 
-            x = i + 1;
-            y = i+ 1;
 
             Cluster cluster = new Cluster(x,y);
             listaClusters.add(cluster);

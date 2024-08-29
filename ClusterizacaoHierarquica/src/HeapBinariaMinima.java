@@ -6,8 +6,6 @@ public class HeapBinariaMinima
     private int tam;             /* Tamanho m�ximo do heap. */
     private Distancia[] vetor;          /* Vetor com elementos. */
 
-    public long duracaoApaga;
-    public long duracaoConstroi;
     private ArrayList<Cluster> listaClusters;
     /* Constr�i heap vazio. */
 
@@ -26,23 +24,6 @@ public class HeapBinariaMinima
     public boolean vazia()
     {
         return n == 0;
-    }
-
-    /* Faz a lista de prioridades logicamente vazia. */
-    public void fazVazia()
-    {
-        n = 0;
-    }
-
-    /* Imprime os elementos da heap. */
-    public void imprime()
-    {
-        System.out.print("Conte�do da heap: ");
-
-        for(int i = 1; i <= n; i++)
-            System.out.print(vetor[i] + " ");
-
-        System.out.println();
     }
 
     /* Busca o menor item na fila de prioridades.
@@ -76,11 +57,10 @@ public class HeapBinariaMinima
 
         return itemMin;
     }
-    public void removeDistancias(Cluster cluster1, Cluster cluster2){
-        int i;
-        int w = 1;
-        long tempoIni, tempoFim, duracao, tempoIni1, tempoFim1;
 
+
+    public void removeDistancias(Cluster cluster1, Cluster cluster2){
+        int i, w = 1;
         for (i = 0; i < n; i++) {
             if (apagaElemento(vetor[i], cluster1, cluster2)) {
                 break;
@@ -95,7 +75,6 @@ public class HeapBinariaMinima
         }
 
         n = w - 1;
-
         listaClusters.remove(cluster1);
         listaClusters.remove(cluster2);
     }
@@ -107,7 +86,6 @@ public class HeapBinariaMinima
         constroiHeap();
         Cluster novoCluster = new Cluster(distanciaRemovida.cluster1, distanciaRemovida.cluster2);
         incluiDistancias(novoCluster);
-
     }
 
 
@@ -159,9 +137,6 @@ public class HeapBinariaMinima
         vetor[pos] = x;
     }
 
-    public int getN() {
-        return n;
-    }
 
     private void incluiDistancias(Cluster novoCluster){
         Distancia novaDistancia;
