@@ -65,6 +65,9 @@ public class HeapBinariaMinima
             if (apagaElemento(vetor[i], cluster1, cluster2)) {
                 break;
             }
+            else{
+                return;
+            }
         }
 
         for (; i< n;i++){
@@ -77,13 +80,14 @@ public class HeapBinariaMinima
         n = w - 1;
         listaClusters.remove(cluster1);
         listaClusters.remove(cluster2);
+        constroiHeap();
+
     }
 
 
     public void novoCluster(){
         Distancia distanciaRemovida = removeMin();
         removeDistancias(distanciaRemovida.cluster1,distanciaRemovida.cluster2);
-        constroiHeap();
         Cluster novoCluster = new Cluster(distanciaRemovida.cluster1, distanciaRemovida.cluster2);
         incluiDistancias(novoCluster);
     }
